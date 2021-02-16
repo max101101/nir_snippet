@@ -44,12 +44,22 @@ def union_members(group1, group2):
 
 	return list(union)
 
+'''
 mapping = {
 	"baraholka_graufr": 0, # 92996
 	"airsoft_life": 1, # 64174
 	"airsoft_pain": 2, # 55527
 	"airsoftgroup": 3, # 132067
 	"ostrike": 4, # 23123
+}
+'''
+
+mapping = {
+	"bmw": 0,
+	"mercedesbenzrussia": 1,
+	"audi": 2,
+	"german_luxury": 3,
+	"nissanrussia": 4,
 }
 
 def form_data():
@@ -79,17 +89,36 @@ def form_Xy(data):
 	return np.array(X), np.array(y)
 
 if __name__ == "__main__":
-	#token = "7af307a27af307a27af307a2847a8571be77af37af307a21ad8cdc3a1c9eca11a1ca8b9"
-	#session = vk.Session(access_token=token)
-	#vk_api = vk.API(session)
+	'''
+	token = "7af307a27af307a27af307a2847a8571be77af37af307a21ad8cdc3a1c9eca11a1ca8b9"
+	session = vk.Session(access_token=token)
+	vk_api = vk.API(session)
 
-	#members = get_members(group)
-	#save_data(members, filename=group+".txt")
+	group = "audi"
+	members = get_members(group)
+	save_data(members, filename=group+".txt")
+	'''
+
+	audi = enter_data(filename="audi.txt")
+	bmw = enter_data(filename="bmw.txt")
+	mer = enter_data(filename="mercedesbenzrussia.txt")
+	nis = enter_data(filename="nissanrussia.txt")
+	ger = enter_data(filename="german_luxury.txt")
+	print(len(get_intersection(ger, bmw))/len(ger))
+	print(len(get_intersection(ger, mer))/len(ger))
+	print(len(get_intersection(ger, audi))/len(ger))
+	print(len(get_intersection(ger, nis))/len(ger))
+	ger_bmw = get_intersection(ger, bmw)
+	print(len(get_intersection(ger_bmw, mer))/len(ger_bmw))
+	print(len(get_intersection(ger_bmw, audi))/len(ger_bmw))
+	print(len(get_intersection(ger_bmw, nis))/len(ger_bmw))
+	ger_bmw_mer = get_intersection(ger_bmw, mer)
+	print(len(get_intersection(ger_bmw_mer, audi))/len(ger_bmw_mer))
+	print(len(get_intersection(ger_bmw_mer, nis))/len(ger_bmw_mer))
+
 
 	data = form_data()
-
 	X, y = form_Xy(data)
-	#X, y = load_iris(return_X_y=True)
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=0)
 	gnb = GaussianNB()
 	y_pred = gnb.fit(X_train, y_train).predict(X_test)
