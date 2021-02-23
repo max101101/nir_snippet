@@ -44,15 +44,6 @@ def union_members(group1, group2):
 
 	return list(union)
 
-'''
-mapping = {
-	"baraholka_graufr": 0, # 92996
-	"airsoft_life": 1, # 64174
-	"airsoft_pain": 2, # 55527
-	"airsoftgroup": 3, # 132067
-	"ostrike": 4, # 23123
-}
-'''
 
 mapping = {
 	"bmw": 0,
@@ -60,7 +51,47 @@ mapping = {
 	"audi": 2,
 	"german_luxury": 3,
 	"nissanrussia": 4,
+	"baraholka_graufr": 5, # 92996
+	"airsoft_life": 6, # 64174
+	"airsoft_pain": 7, # 55527
+	"airsoftgroup": 8, # 132067
+	"ostrike": 9, # 23123
+	"mvdota": 10,
+	"itpedia_youtube": 11,
+	"it_joke": 12,
+	"otchisleno": 13,
+	"gnummetv": 14,
+	"cartwork": 15,
+	"hobbyworld": 16,
+	"mhkoff": 17,
+	"catism": 18,
+	"playstation.world": 19,
+	"questions_of_chgk": 20,
+	"igromania": 21,
+	"igroman": 22,
+	"vizit.condoms": 23,
+	"navi": 24,
+	"softclubgames": 25,
+	"ustami_msu": 26,
+	"playstationru": 27,
+	"gagagames": 28,
+	"by_duran": 29,
 }
+
+def form_report():
+	f = open("report.txt", "w")
+	keys = list(mapping.keys())
+	l = len(keys)
+	for i in range(l):
+		group1 = keys[i]
+		members1 = enter_data(filename=group1+".txt")
+		for j in range(i+1, l):
+			group2 = keys[j]
+			members2 = enter_data(filename=group2+".txt")
+			inter = get_intersection(members1, members2)
+			f.write(group1 + " " + group2 + " " + str(len(inter)/min(len(members1), len(members2))) + "\n")
+		print(i, l)
+
 
 def form_data():
 	union = []
@@ -68,16 +99,23 @@ def form_data():
 		members = enter_data(filename=group+".txt")
 		union = union_members(union, members)
 
+	print("union done")
+
 	data = {}
 	for user in union:
 		data[user] = [0 for _ in range(len(mapping))]
+
+	print("mem alloc done")
 
 	for group in mapping.keys():
 		members = enter_data(filename=group+".txt")
 		for user in members:
 			data[user][mapping[group]] = 1
 
+	print("dataset done")
+
 	return data
+
 
 def form_Xy(data):
 	X = []
@@ -94,30 +132,19 @@ if __name__ == "__main__":
 	session = vk.Session(access_token=token)
 	vk_api = vk.API(session)
 
-	group = "audi"
+	group = "by_duran"
 	members = get_members(group)
 	save_data(members, filename=group+".txt")
 	'''
 
-	audi = enter_data(filename="audi.txt")
-	bmw = enter_data(filename="bmw.txt")
-	mer = enter_data(filename="mercedesbenzrussia.txt")
-	nis = enter_data(filename="nissanrussia.txt")
-	ger = enter_data(filename="german_luxury.txt")
-	print(len(get_intersection(ger, bmw))/len(ger))
-	print(len(get_intersection(ger, mer))/len(ger))
-	print(len(get_intersection(ger, audi))/len(ger))
-	print(len(get_intersection(ger, nis))/len(ger))
-	ger_bmw = get_intersection(ger, bmw)
-	print(len(get_intersection(ger_bmw, mer))/len(ger_bmw))
-	print(len(get_intersection(ger_bmw, audi))/len(ger_bmw))
-	print(len(get_intersection(ger_bmw, nis))/len(ger_bmw))
-	ger_bmw_mer = get_intersection(ger_bmw, mer)
-	print(len(get_intersection(ger_bmw_mer, audi))/len(ger_bmw_mer))
-	print(len(get_intersection(ger_bmw_mer, nis))/len(ger_bmw_mer))
+
+	#form_report()
 
 
-	data = form_data()
+	print(len(form_data().keys()))
+
+
+	'''
 	X, y = form_Xy(data)
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=0)
 	gnb = GaussianNB()
@@ -127,3 +154,4 @@ if __name__ == "__main__":
 	for v in y_pred:
 		counts[v] = counts[v] + 1 
 	print(counts)
+	'''
